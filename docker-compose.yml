@@ -1,0 +1,8 @@
+version: "1"
+services:
+  fstar:
+    container_name: fstar-v1
+    build: .
+      # context: .
+      # dockerfile: 
+    image: fstar:latest
