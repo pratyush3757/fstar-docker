@@ -1,8 +1,8 @@
-FROM ubuntu
+FROM ubuntu:jammy
 
 # Args should be after FROM statement
 ARG USERNAME=docker
-ARG USER_UID=1001 # GID 1000 already exists for some reason
+ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
 SHELL ["/bin/bash", "--login", "-c"]
@@ -12,7 +12,6 @@ SHELL ["/bin/bash", "--login", "-c"]
 # https://code.visualstudio.com/remote/advancedcontainers/add-nonroot-user
 
 # Install required packages and clean up
-# distutils has been deprecated in favor of setuptools
 RUN apt-get update -y -q \
     && apt-get install -y -q --no-install-recommends \
     sudo \
@@ -21,7 +20,7 @@ RUN apt-get update -y -q \
     ca-certificates \
     python3 \
     libgmp-dev \
-    python3-setuptools \
+    python3-distutils \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
