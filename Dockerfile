@@ -1,35 +1,26 @@
-FROM ubuntu
+FROM alpine
 
 # Args should be after FROM statement
 ARG USERNAME=docker
 ARG USER_UID=1001 # GID 1000 already exists for some reason
 ARG USER_GID=$USER_UID
 
-SHELL ["/bin/bash", "--login", "-c"]
-
-# Parts taken from:
-# https://stackoverflow.com/a/72678903
-# https://code.visualstudio.com/remote/advancedcontainers/add-nonroot-user
-
 # Install required packages and clean up
-# distutils has been deprecated in favor of setuptools
-RUN apt-get update -y -q \
-    && apt-get install -y -q --no-install-recommends \
+RUN apk update \
+    && apk add \
     sudo \
     opam \
-    git \
     ca-certificates \
     python3 \
-    libgmp-dev \
-    python3-setuptools \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    py3-setuptools \
+    git \
+    build-base \
+    gmp-dev \
+    && apk cache clean
 
 # Add a user with sudo perms
-RUN groupadd --gid $USER_GID $USERNAME \
-    && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
-    && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
-    && chmod 0440 /etc/sudoers.d/$USERNAME
+RUN addgroup --gid $USER_GID $USERNAME \
+    && adduser --disabled-password --uid $USER_UID --home "/home/$USERNAME" --ingroup "$USERNAME" $USERNAME
 
 # Change to user
 USER $USERNAME
@@ -43,4 +34,4 @@ RUN opam init --auto-setup --disable-sandboxing --yes \
     && opam pin add --no-depexts -y --confirm-level=unsafe-yes fstar --dev-repo \
     && opam clean -a -c -s --logs
 
-CMD ["/bin/bash", "--login"]
+CMD ["/bin/sh"]
