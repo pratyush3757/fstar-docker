@@ -9,6 +9,7 @@ ARG USER_GID=$USER_UID
 RUN apk update \
     && apk add \
     sudo \
+    bash \
     opam \
     ca-certificates \
     python3 \
