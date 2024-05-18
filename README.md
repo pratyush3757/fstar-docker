@@ -13,7 +13,7 @@ docker pull ghcr.io/pratyush3757/fstar-docker:master
 ```
 
 ### Usage:
-The built packages are currently in `/home/docker/fstar-bin/`
+The built packages are currently in `/home/docker/fstar-bin/`.  
 You will have to mount the a host folder as the binaries will only be 
 able to access the container's filesystem.
 ```bash
