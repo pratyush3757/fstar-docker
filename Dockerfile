@@ -37,7 +37,7 @@ RUN opam init --auto-setup --disable-sandboxing --yes \
 
 # Runtime image
 # Installs and uses only the minimal dependencies needed to run the binaries
-FROM apline
+FROM alpine
 
 # Args should be after FROM statement
 ARG USERNAME=docker
